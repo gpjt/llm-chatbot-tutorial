@@ -1,6 +1,8 @@
 Welcome to the first part of my tutorial in how to build a chatbot using OpenAI's interface to their Large Language Models (LLMs)!  You can read the introduction [here](TBD).
 
-The goal in this post is to write a basic bot script that accepts user input, and just bounces it off an OpenAI LLM.  We'll start with this simple CLI-based code to prompt the user, read a multi-line input (terminated with control-D on an empty line on Linux or Mac, or with a control-Z on an empty line for Windows), and then just present the user with a dummy response.  You can use control-C to exit (on all three platforms).
+If you're reading this and want to get the best out of it, I strongly recommend that you run the code on your own machine as you go along; trust me, it will stick in your mind much better if you do that.
+
+The goal in this post is to write a basic bot script that accepts user input, and just bounces it off an OpenAI LLM to generate a response.  We'll start with this simple CLI-based code to prompt the user, read a multi-line input (terminated with control-D on an empty line on Linux or Mac, or with a control-Z on an empty line for Windows), and then just present the user with a dummy response.
 
 ```python
 import sys
@@ -25,20 +27,27 @@ def main():
         print("Generating response...")
         print("-" * 40)
 
-        print()
         response = generate_response(user_message)
-        print()
+
+        print("Response received...")
+        print("-" * 40)
 
         print("Bot:")
         print(response)
         print()
+
+        print("-" * 40)
+        print("...response ends")
+        print("-" * 40)
 
 
 if __name__ == "__main__":
     main()
 ```
 
-I'm assuming that you know Python, so I won't explain this code, it's pretty simple.  The function `generate_response`, is, of course, where all of the interesting stuff will happen anyway.
+I'm assuming that you know Python, so I won't explain this code -- it's pretty simple.  The function `generate_response`, is, of course, where all of the interesting stuff will happen anyway.
+
+Try running it, just to get used to how to interact.  Use control-C to exit (on all three platforms).
 
 So now let's connect up to OpenAI!  If you haven't already, you'll need to [sign up on their site](https://platform.openai.com/signup).  As of time of writing, this will give you a US$18 credit for API calls, which should be ample for anything in these tutorials.
 
@@ -62,42 +71,56 @@ def generate_response(message):
 
 What we're doing is calling the OpenAI API and asking for a completion to the message stored in `message`, using the language model `ada` (their oldest, cheapest one).  The other parameters we'll get into later on.  The response we get back has multiple choices -- you can ask the API for a bunch of alternative responses, so they would come back in that list, but the default is just one response, which is the one we use.
 
-Let's try running that.  In a console, set the environment variable `OPENAI_API_KEY` to your secret key, and run the bot.  Type in a message for it, terminate with ^D (or ^Z on Windows), and...
+Let's try running that.  In a console, set the environment variable `OPENAI_API_KEY` to your secret key...
 
 ```
 $ export OPENAI_API_KEY=sk-blahblahblah
+```
+
+...and run the bot.
+
+```
+$ python bot.py
+```
+
+Type in a message for it, terminate with ^D (or ^Z on Windows), and...
+
+```
+User:
+Hello
+----------------------------------------
+Generating response...
+----------------------------------------
+Response received...
+----------------------------------------
+Bot:
+
+This is the first time I've ever had a friend ask me to do something like this. I am a little scared, but I'm excited
+
+----------------------------------------
+...response ends
+----------------------------------------
+User:
+```
+
+The response you get will almost certainly be different, but it's pretty much certain to be equally random.  So we got something, but it's not much of a reply -- though it is an appropriate sequence of words to come after "Hello".  Maybe we'd do better with a different language model?  `babbage` is the one after `ada`, so change the `model` parameter to use that, and...
+
+```
 $ python bot.py
 User:
 Hello
 ----------------------------------------
 Generating response...
 ----------------------------------------
-
-
+Response received...
+----------------------------------------
 Bot:
 
-I am a new user here, and I just wanted to let you know that I received my order today and it is perfect!!
+My name is David and I am a proud owner of a 2005 Audi A4. I have driven this car for about 5 years now, and
 
-I
-
-User:
-```
-
-The response you get will almost certainly be different, but it's pretty much certain to be equally random.  So we got something, but it's not much of a reply.  Maybe we'd do better with a different language model?  `babbage` is the one after `ada`, so change the `model` parameter to use that, and...
-
-```
-$ python bot.py
-User:
-Hello
 ----------------------------------------
-Generating response...
+...response ends
 ----------------------------------------
-
-
-Bot:
-
-I am a student in the University of California, Berkeley. I have been interested in computers since I was a child. I have been working on
-
 User:
 ```
 
@@ -110,14 +133,15 @@ Hello
 ----------------------------------------
 Generating response...
 ----------------------------------------
-
-
+Response received...
+----------------------------------------
 Bot:
 
-I have an issue with my iMac.
+I am new to this forum so I am sure that I am not very good at this. I have a problem with my husband. He was
 
-I bought it with the intention of upgrading the RAM to 4 GB and the hard drive to
-
+----------------------------------------
+...response ends
+----------------------------------------
 User:
 ```
 
@@ -134,12 +158,15 @@ Hello
 ----------------------------------------
 Generating response...
 ----------------------------------------
-
-
+Response received...
+----------------------------------------
 Bot:
 
-Hi there! How are you doing?
+Hi there! How can I help you?
 
+----------------------------------------
+...response ends
+----------------------------------------
 User:
 ```
 
@@ -151,12 +178,15 @@ This is a test
 ----------------------------------------
 Generating response...
 ----------------------------------------
-
-
+Response received...
+----------------------------------------
 Bot:
 
-This is a test sentence used to demonstrate how a sentence can be used for testing purposes. A test sentence can be used to check the accuracy of
+This is a test sentence used to demonstrate how a sentence can be used as a test. It can be used to test grammar, punctuation,
 
+----------------------------------------
+...response ends
+----------------------------------------
 User:
 ```
 
@@ -174,14 +204,17 @@ Once more unto
 ----------------------------------------
 Generating response...
 ----------------------------------------
-
-
+Response received...
+----------------------------------------
 Bot:
 
 The breach, dear friends, once more;
 Or close the wall up with our English dead.
 In peace there's nothing so becomes a
 
+----------------------------------------
+...response ends
+----------------------------------------
 User:
 ```
 
@@ -216,31 +249,29 @@ Hello
 ----------------------------------------
 Generating response...
 ----------------------------------------
-
-
+Response received...
+----------------------------------------
 Bot:
 Hello
 
 
 User:
-Hi
+How are you?
 
 
 Bot:
-Hi
+I'm good
 
 
 User:
-Hi
+I'm good too
 
 
-Bot:
-Hi
+Bot
 
-
-User:
-
-
+----------------------------------------
+...response ends
+----------------------------------------
 User:
 ```
 
@@ -255,54 +286,26 @@ Hello
 ----------------------------------------
 Generating response...
 ----------------------------------------
-
-
+Response received...
+----------------------------------------
 Bot:
-Good morning.
+Hi, how are you?
 
 User:
-Good morning.
+I'm good, how are you?
 
 Bot:
-How are you?
-
-User:
 I'm fine.
 
 
-User:
-```
 
-Beginning to look like a real conversation...  Now `curie`:
-
-```
-$ python bot.py
-User:
-Hello
 ----------------------------------------
-Generating response...
+...response ends
 ----------------------------------------
-
-
-Bot:
-Hello.
-
-
-User:
-How are you?
-
-
-Bot:
-I am well.
-
-
-User:
-What is your name?
-
 User:
 ```
 
-Equally good, I'd say.  Now `text-davinci-003`:
+Still looking like a real conversation...  Now `curie`:
 
 ```
 $ python bot.py
@@ -311,15 +314,46 @@ Hello
 ----------------------------------------
 Generating response...
 ----------------------------------------
+Response received...
+----------------------------------------
+Bot:
+Hello, User. How are you this fine day?
 
 
+User:
+Fine. How are you?
+
+
+Bot:
+I am fine
+
+----------------------------------------
+...response ends
+----------------------------------------
+User:
+```
+
+Even better, I'd say.  Now `text-davinci-003`:
+
+```
+$ python bot.py
+User:
+Hello
+----------------------------------------
+Generating response...
+----------------------------------------
+Response received...
+----------------------------------------
 Bot:
 Hi there! How can I help you?
 
+----------------------------------------
+...response ends
+----------------------------------------
 User:
 ```
 
-That's interesting.  It stopped after having generated a full response.  What's going on here?  Why did the older models try to provide a full conversation continuing on from the prompt, while the more recent one stopped after a single response?
+That's interesting.  It stopped after having generated a full response, and didn't try to continue the conversation playing both parts.  What's going on here?  Why did the older models try to provide a full conversation continuing on from the prompt (which, when you think about it, is a completely reasonable thing to do given that all we told it was that the text was a transcript of a conversation -- we didn't tell it that it was playing the part of the bot, we just told it to continue the transcript) -- while the more recent model stopped after a single response?
 
 Let's look at the call we made to the completion API:
 
