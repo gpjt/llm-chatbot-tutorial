@@ -189,16 +189,250 @@ So what's the difference between an LLM and the auto-complete feature on a phone
 
 Another way to think of it is that in order to suggest the next word based on the three previous ones, you can use statistics.  But in order to suggest the next 4,000 words based on a starting 4,000, then you need to do something that is very much like "thinking".  Whether it's real thinking or not is a really interesting philosophical question, and as such I'm going to completely ignore it.
 
-Anyway, what that all tells us is that if we want to write a chatbot, we're going to need to provide the LLM with a prompt that logically could only be completed with a chatbot-like response.  So let's try this (adding a :
+Anyway, what that all tells us is that if we want to write a chatbot, we're going to need to provide the LLM with a prompt that logically could only be completed with a chatbot-like response.  So let's try this (also adding a `from textwrap import dedent` to the imports at the start:
 
 ```python
 def generate_response(message):
 	prompt = dedent(f"""
-		The
+		The following is the transcript of a chat between "Bot", a chatbot, and "User", a human using it.
+
+		User:
+		{message}
+
+		Bot:
 	""")
     response = openai.Completion.create(
-        model="ada", prompt=message, temperature=0.5, max_tokens=30
+        model="ada", prompt=prompt, temperature=0.5, max_tokens=30
     )
     return response["choices"][0]["text"]
 ```
+
+You can see that we've gone back to the primitive `ada` model.  Let's see what it does:
+
+```
+$ python bot.py
+User:
+Hello
+----------------------------------------
+Generating response...
+----------------------------------------
+
+
+Bot:
+Hello
+
+
+User:
+Hi
+
+
+Bot:
+Hi
+
+
+User:
+Hi
+
+
+Bot:
+Hi
+
+
+User:
+
+
+User:
+```
+
+There's almost something there!  It does seem to have a problem -- it's continuing the conversation with itself after generating an initial response.  We'll look into that in a bit, but first let's try the other models.
+
+So, `babbage`:
+
+```
+$ python bot.py
+User:
+Hello
+----------------------------------------
+Generating response...
+----------------------------------------
+
+
+Bot:
+Good morning.
+
+User:
+Good morning.
+
+Bot:
+How are you?
+
+User:
+I'm fine.
+
+
+User:
+```
+
+Beginning to look like a real conversation...  Now `curie`:
+
+```
+$ python bot.py
+User:
+Hello
+----------------------------------------
+Generating response...
+----------------------------------------
+
+
+Bot:
+Hello.
+
+
+User:
+How are you?
+
+
+Bot:
+I am well.
+
+
+User:
+What is your name?
+
+User:
+```
+
+Equally good, I'd say.  Now `text-davinci-003`:
+
+```
+$ python bot.py
+User:
+Hello
+----------------------------------------
+Generating response...
+----------------------------------------
+
+
+Bot:
+Hi there! How can I help you?
+
+User:
+```
+
+That's interesting.  It stopped after having generated a full response.  What's going on here?  Why did the older models try to provide a full conversation continuing on from the prompt, while the more recent one stopped after a single response?
+
+Let's look at the call we made to the completion API:
+
+```python
+    response = openai.Completion.create(
+        model="some-model", prompt=prompt, temperature=0.5, max_tokens=30
+    )
+```
+
+We've told it to use `some-model`, with our `prompt`.  The `temperature` we'll look into a bit later -- for now, let's look at `max_tokens`.  That is telling the system that is running the LLM the *maximum* number of tokens that we want.  Tokens, in this sense, are roughly equal to words -- they're the elements that the LLM generates, one at a time.  Small words will be tokens on their own, but longer words will be split into tokens, each of which has some kind of semantic meaning -- for example, "pseudoscientist" might be split into "pseudo", "scient", and "ist".  The LLM will keep generating tokens until something about the structure of the prompt that it is trying to complete indicates that a reasonable completion will stop there, or until the code that is running it stops asking for new tokens.
+
+The older models, `ada`, `babbage`, and `curie` all just kept on generating tokens until they hit the 30-token maximum we'd passed into the API call and the system that is asking them to generate new ones stopped doing so.  For `text-davinci-003` -- I don't know this for sure, but the fact that it decided to stop after one response, and also it's very chat-like response even before it was given the context that it was predicting a chat session suggests to me that it has been trained on a large number of chat sessions in the past, so it "knows" their structure very well.
+
+But could we make the earlier models work in a similar fashion?  As it turns out, we could.  There's an optional argument to the `Completion.create` method, `stop`, which essentially says "when the model emits this string, stop asking it for more tokens".  So let's try that, again with all four models:
+
+```python
+    response = openai.Completion.create(
+        model="some-model", prompt=prompt, temperature=0.5, max_tokens=30, stop="User:"
+    )
+```
+
+For `ada`:
+
+```
+$ python bot.py
+User:
+Hello
+----------------------------------------
+Generating response...
+----------------------------------------
+Response received...
+----------------------------------------
+Bot:
+Hello
+
+
+
+
+----------------------------------------
+...response ends
+----------------------------------------
+User:
+```
+
+For `babbage`:
+
+```
+$ python bot.py
+User:
+Hello
+----------------------------------------
+Generating response...
+----------------------------------------
+Response received...
+----------------------------------------
+Bot:
+Hi there.
+
+
+
+
+----------------------------------------
+...response ends
+----------------------------------------
+User:
+```
+
+For `curie`:
+
+```
+$ python bot.py
+User:
+Hello
+----------------------------------------
+Generating response...
+----------------------------------------
+Response received...
+----------------------------------------
+Bot:
+Hello
+
+
+
+
+----------------------------------------
+...response ends
+----------------------------------------
+User:
+```
+
+...and finally `text-davinci-003`:
+
+```
+$ python bot.py
+User:
+Hello
+----------------------------------------
+Generating response...
+----------------------------------------
+Response received...
+----------------------------------------
+Bot:
+Hi there! How can I help you?
+
+----------------------------------------
+...response ends
+----------------------------------------
+User:
+```
+
+
+
+
+
+
 

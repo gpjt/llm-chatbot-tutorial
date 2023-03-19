@@ -1,11 +1,20 @@
 import sys
+from textwrap import dedent
 
 import openai
 
 
 def generate_response(message):
+    prompt = dedent(f"""
+        The following is the transcript of a chat between "Bot", a chatbot, and "User", a human using it.
+
+        User:
+        {message}
+
+        Bot:
+    """)
     response = openai.Completion.create(
-        model="text-davinci-003", prompt=message, temperature=0.5, max_tokens=30
+        model="text-davinci-003", prompt=prompt, temperature=0.5, max_tokens=30, stop="User:"
     )
     return response["choices"][0]["text"]
 
@@ -25,13 +34,18 @@ def main():
         print("Generating response...")
         print("-" * 40)
 
-        print()
         response = generate_response(user_message)
-        print()
+
+        print("Response received...")
+        print("-" * 40)
 
         print("Bot:")
         print(response)
         print()
+
+        print("-" * 40)
+        print("...response ends")
+        print("-" * 40)
 
 
 if __name__ == "__main__":
