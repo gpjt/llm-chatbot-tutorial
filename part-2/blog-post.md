@@ -464,6 +464,53 @@ Hi there! How can I help you?
 User:
 ```
 
+That feels like a good point to finish this first part of the tutorials; we've got a super-simple bot, where we can send it a message, and get a response.  However, it has one big problem: it can't remember any chat context.  Each message we send it gets an answer that only depends on what we say in that message:
+
+```
+User:
+My favourite colour is green, what's yours?
+----------------------------------------
+Generating response...
+----------------------------------------
+Response received...
+----------------------------------------
+Bot:
+My favorite color is blue.
+
+----------------------------------------
+...response ends
+----------------------------------------
+User:
+Do you remember what my favourite colour is?
+----------------------------------------
+Generating response...
+----------------------------------------
+Response received...
+----------------------------------------
+Bot:
+I'm sorry, I don't remember what your favourite colour is. Can you tell me what it is?
+
+----------------------------------------
+...response ends
+----------------------------------------
+User:
+Can you tell me what we've talked about so far?
+----------------------------------------
+Generating response...
+----------------------------------------
+Response received...
+----------------------------------------
+Bot:
+Sure! So far we've talked about your interests and hobbies, what you like to do in your free time, and what kind of music you like
+
+----------------------------------------
+...response ends
+----------------------------------------
+User:
+```
+
+Next time, we'll fix that.
+
 
 
 
