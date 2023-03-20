@@ -310,14 +310,14 @@ completed with a chatbot-like response.  So let's try this (also adding a
 
 ```python
 def generate_response(message):
-	prompt = dedent(f"""
-		The following is the transcript of a chat between "Bot", a chatbot, and "User", a human using it.
+    prompt = dedent(f"""
+        The following is the transcript of a chat between "Bot", a chatbot, and "User", a human using it.
 
-		User:
-		{message}
+        User:
+        {message}
 
-		Bot:
-	""")
+        Bot:
+    """)
     response = openai.Completion.create(
         model="ada", prompt=prompt, temperature=0.5, max_tokens=30
     )
@@ -615,7 +615,7 @@ Generating response...
 Response received...
 ----------------------------------------
 Bot:
-You said your favorite colot is blue.
+Yes, you said your favorite color is blue.
 
 ----------------------------------------
 ...response ends
