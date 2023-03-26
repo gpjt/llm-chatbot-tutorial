@@ -96,9 +96,11 @@ def generate_response(message):
     return response["choices"][0]["text"]
 ```
 
-What we're doing is calling the OpenAI API and asking for a completion to the
+What we're doing is calling the OpenAI API and asking for a *completion* to the
 message stored in `message`, using the language model `ada` (their oldest,
-cheapest one).  The other parameters we'll get into later on.  The response we
+cheapest one).  The word "completion" has a very specific meaning here, which
+should be clear by the end of this post, but for now just think of it as a reply.
+The other parameters we'll get into later on.  The response we
 get back has multiple choices -- you can ask the API for a bunch of alternative
 responses, so they would come back in that list, but the default is just one
 response, which is the one we use.
@@ -238,12 +240,12 @@ implementing chat.  That's useful if you're just trying to bang out a chatbot as
 efficiently as possible, but less useful if you're trying to learn how these
 bots work under the hood.
 
-So let's stop here, and take stock.  What's going on here?  The LLM is
+So let's stop here, and take stock.  What's going on?  The LLM is
 generating words, but it's not really replying to us except in that first reply
 from the `text-davinci-003` model.
 
 The core thing to understand about LLMs is that they are trying to complete the
-text that they've been provided with.  They were trained with a massive amount
+text that they've been provided with -- hence "completion" in the API call.  They were trained with a massive amount
 of text, and "know" that when some text starts with X, it's most likely to
 continue with Y.  That explains all of the responses from the older models.
 
