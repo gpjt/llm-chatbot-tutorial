@@ -53,9 +53,9 @@ def generate_response(user_message_content):
     prompt = dedent(f"""
         The following is the transcript of a chat between a chatbot and a human using it.
 
-        The user's messages are wrapped in the following tags: {USER_INTRO}, {USER_OUTRO}
+        The user's messages start with the XML tag {USER_INTRO} and end with the tag {USER_OUTRO}
 
-        The bot's messages are wrapped in the following tags: {BOT_INTRO}, {BOT_OUTRO}
+        The bot's messages start with the XML tag {BOT_INTRO} and end with the tag {BOT_OUTRO}
 
     """)
     for message in conversation_history:
