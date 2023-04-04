@@ -1,3 +1,12 @@
+---
+slug: ai-llm-bot-beginners-tutorial-02
+title: Building an AI chatbot for beginners: part 2
+date: 2023-04-04 19:45:00+00:00
+state: published
+categories: programming, python, ai
+format: md
+---
+
 Welcome to the second part of my tutorial on how to build a chatbot using OpenAI's
 interface to their Large Language Models (LLMs)!  You can read the introduction
 [here](/2023/03/ai-llm-bot-beginners-tutorial-00), and the first part
@@ -5,11 +14,17 @@ interface to their Large Language Models (LLMs)!  You can read the introduction
 not because I'm an expert, but because I'm learning how to do it myself, and writing
 about it helps me learn faster.  Caveat lector :-)
 
+In this post, we'll give the bot some memory of the conversation so far.
+
 At the end of the first part, we had a program that would accept input from a user,
 combine it with some static text to make a prompt that an LLM would complete in the
 character of a chatbot (stopping at the point that the chatbot should stop, and not
 trying to carry on the conversation), then send it to OpenAI's API specifying an
-LLM model, and print out the result.  The code was this:
+LLM model, and print out the result.
+
+<!--more-->
+
+The code was this:
 
 ```python
 from textwrap import dedent
@@ -74,21 +89,21 @@ following:
 
 ```python
 def get_completion(model, prompt, temperature, max_tokens, stop):
-	print("*" * 40)
-	print("Getting completion for prompt:")
-	print(">>>")
-	print(prompt)
-	print("<<<")
+    print("*" * 40)
+    print("Getting completion for prompt:")
+    print(">>>")
+    print(prompt)
+    print("<<<")
     response = openai.Completion.create(
-    	model=model, prompt=prompt, temperature=temperature, max_tokens=max_tokens, stop=stop
+        model=model, prompt=prompt, temperature=temperature, max_tokens=max_tokens, stop=stop
     )
     result = response["choices"][0]["text"]
-	print("Completion is:")
-	print(">>>")
-	print(result)
-	print("<<<")
-	print("*" * 40)
-	return result
+    print("Completion is:")
+    print(">>>")
+    print(result)
+    print("<<<")
+    print("*" * 40)
+    return result
 
 
 def generate_response(message):
