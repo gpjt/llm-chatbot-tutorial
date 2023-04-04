@@ -21,8 +21,10 @@ def get_completion(model, prompt, temperature, max_tokens, stop):
     return result
 
 
-USER_INTRO = "051db2a5-b725-4b14-86c3-bce9f207834f"
-BOT_INTRO = "4ce7886e-1500-4f45-b5be-3253c75872aa"
+USER_INTRO = "<UserMessage>"
+USER_OUTRO = "</UserMessage>"
+BOT_INTRO = "<BotMessage>"
+BOT_OUTRO = "</BotMessage>"
 
 
 class Message:
@@ -33,11 +35,13 @@ class Message:
     def __str__(self):
         if self.sender == "User":
             intro = USER_INTRO
+            outro = USER_OUTRO
         elif self.sender == "Bot":
             intro = BOT_INTRO
+            outro = BOT_OUTRO
         else:
             raise Exception(f"Unknown sender {self.sender}")
-        return f"{intro}:\n{self.content}"
+        return f"{intro}\n{self.content}\n{outro}"
 
 
 conversation_history = []
@@ -49,9 +53,9 @@ def generate_response(user_message_content):
     prompt = dedent(f"""
         The following is the transcript of a chat between a chatbot and a human using it.
 
-        The user's messages start with the following text: {USER_INTRO}
+        The user's messages are wrapped in the following tags: {USER_INTRO}, {USER_OUTRO}
 
-        The bot's messages start with the following text: {BOT_INTRO}
+        The bot's messages are wrapped in the following tags: {BOT_INTRO}, {BOT_OUTRO}
 
     """)
     for message in conversation_history:
@@ -61,7 +65,7 @@ def generate_response(user_message_content):
 
     bot_message_content = get_completion(
         model="text-davinci-003", prompt=prompt,
-        temperature=0.5, max_tokens=30, stop=USER_INTRO
+        temperature=0.5, max_tokens=30, stop=[BOT_OUTRO, USER_INTRO]
     )
     bot_message = Message("Bot", bot_message_content)
     conversation_history.append(bot_message)
