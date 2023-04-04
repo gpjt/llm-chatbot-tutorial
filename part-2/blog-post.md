@@ -704,3 +704,21 @@ the chatbot wasn't designed to handle.
 So, how can we guard against that?  That's and interesting question; I had a great solution,
 which worked well for the bots I've built in the past -- but failed completely with this simple
 test case.  So let's make it the topic for the next post.
+
+[UPDATE] So after delaying this post for two weeks while I tried to work out a
+solid way to protect the bot against this attack, and an evening trying thousands
+of different clever tricks, I though "I wonder how ChatGPT defends itself against
+this?"  Here's what I got, firstly with GPT-3.5:
+
+![ChatGPT-3.5 failing the test](/images/chatgpt-injection-3.5.png)
+
+...and, next, with the more advanced GPT-4:
+
+![ChatGPT-4 failing the test](/images/chatgpt-injection-4.png)
+
+This prompt injection seems to be surprisingly hard to defend against.  If even
+OpenAI with all the time and effort they've spent on safety have left their own bot
+open to it, it's probably not something I should be spending time on at this stage!
+
+So, next time: how to avoid the "overly-long history" problem above.
+
