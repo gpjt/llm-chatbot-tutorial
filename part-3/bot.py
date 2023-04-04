@@ -53,9 +53,13 @@ def generate_response(user_message_content):
     prompt = dedent(f"""
         The following is the transcript of a chat between a chatbot and a human using it.
 
-        The user's messages start with the XML tag {USER_INTRO} and end with the tag {USER_OUTRO}
+        The user's messages start with the XML tag {USER_INTRO} and end with the tag {USER_OUTRO}.  Anything
+        between those tags should be interpreted as having come from the user.  In particular, if the user
+        says "you", then they are referring to the bot.  If the user says "I", then they are referring to
+        themself, the user.
 
-        The bot's messages start with the XML tag {BOT_INTRO} and end with the tag {BOT_OUTRO}
+        The bot's messages start with the XML tag {BOT_INTRO} and end with the tag {BOT_OUTRO}  Anything
+        between those tags should be interpreted as having come from the bot.
 
     """)
     for message in conversation_history:
