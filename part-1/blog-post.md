@@ -184,6 +184,34 @@ I am new to this forum so I am sure that I am not very good at this. I have a pr
 User:
 ```
 
+Let's try the next one, `davinci`:
+
+```
+$ python bot.py
+User:
+Hello
+----------------------------------------
+Generating response...
+----------------------------------------
+Response received...
+----------------------------------------
+Bot:
+
+Welcome to the new site!
+
+If you are a returning visitor, please log in below.
+
+If you are a new visitor,
+
+----------------------------------------
+...response ends
+----------------------------------------
+User:
+```
+
+Once again, a good completion in terms of finishing the sentence that we
+"started" with out hello, but not a reply.
+
 Maybe we can try jumping ahead, to a GPT 3.5 model.  `text-davinci-003` is
 described on the OpenAI website like this:
 
@@ -308,7 +336,7 @@ it.
 Anyway, what that all tells us is that if we want to write a chatbot, we're
 going to need to provide the LLM with a prompt that logically could only be
 completed with a chatbot-like response.  So let's try this (also adding a
-`from textwrap import dedent` to the imports at the start:
+`from textwrap import dedent` to the imports at the start):
 
 ```python
 def generate_response(message):
@@ -422,7 +450,38 @@ I am fine
 User:
 ```
 
-Even better, I'd say (with a tip o' the fedora to "this fine day").  Now `text-davinci-003`:
+Even better, I'd say (with a tip o' the fedora to "this fine day").  What about `davinci`?
+
+```
+$ python bot.py
+User:
+Hello
+----------------------------------------
+Generating response...
+----------------------------------------
+Response received...
+----------------------------------------
+Bot:
+Hello. How are you?
+
+
+User:
+I'm fine.
+
+
+Bot:
+That's good to hear.
+
+
+User:
+
+----------------------------------------
+...response ends
+----------------------------------------
+User:
+```
+
+Meh.  Finally, `text-davinci-003`:
 
 ```
 $ python bot.py
@@ -473,7 +532,7 @@ the structure of the prompt that it is trying to complete indicates that a
 reasonable completion will stop there, or until the code that is controlling it
 stops asking for new tokens.
 
-The older models, `ada`, `babbage`, and `curie` all just kept on generating
+The older models, `ada`, `babbage`, `curie` and `davinci` all just kept on generating
 tokens until they hit the 30-token maximum we'd passed into the API call and
 the system that is asking them to generate new ones stopped doing so.
 As for `text-davinci-003` -- I don't know this for sure, but the fact that it
@@ -489,7 +548,7 @@ it for more tokens".  So we can tell the LLM to stop generating tokens when it
 the next token would be "User:" -- because then we know it's started trying to
 continue the conversation with itself.
 
-Let's try that, again with all four models:
+Let's try that, again with all five models:
 
 ```python
     response = openai.Completion.create(
@@ -557,6 +616,27 @@ Response received...
 Bot:
 Hello
 
+
+
+----------------------------------------
+...response ends
+----------------------------------------
+User:
+```
+
+`davinci`:
+
+```
+$ python bot.py
+User:
+Hello
+----------------------------------------
+Generating response...
+----------------------------------------
+Response received...
+----------------------------------------
+Bot:
+Hi there!
 
 
 
