@@ -718,10 +718,9 @@ Sure! So far we've talked about your interests and hobbies, what you like to do 
 User:
 ```
 
-In the next post, we'll fix that.
+In the next post, we'll fix that.  Here's a link:
 
-
-
+* [Part 2: keeping a history of the conversation](/2023/04/ai-llm-bot-beginners-tutorial-02)
 
 
 
