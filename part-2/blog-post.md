@@ -701,7 +701,7 @@ just as if it were something other than "this is a thing that the user has said"
 more traditional injection attack, like a [SQL injection](https://xkcd.com/327/), we can get effects that
 the chatbot wasn't designed to handle.
 
-So, how can we guard against that?  That's and interesting question; I had a great solution,
+So, how can we guard against that?  That's an interesting question; I had a great solution,
 which worked well for the bots I've built in the past -- but failed completely with this simple
 test case.  So let's make it the topic for the next post.
 
