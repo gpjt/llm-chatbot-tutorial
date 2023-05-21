@@ -1,3 +1,12 @@
+---
+slug: ai-llm-bot-beginners-tutorial-01
+title: Building an AI chatbot for beginners: part 1
+date: 2023-03-19 21:45:00+00:00
+state: published
+categories: programming, python, ai
+format: md
+---
+
 Welcome to the first part of my tutorial on how to build a chatbot using OpenAI's
 interface to their Large Language Models (LLMs)!  You can read the introduction
 [here](/2023/03/ai-llm-bot-beginners-tutorial-00).
@@ -721,6 +730,8 @@ User:
 In the next post, we'll fix that.  Here's a link:
 
 * [Part 2: keeping a history of the conversation](/2023/04/ai-llm-bot-beginners-tutorial-02)
+
+
 
 
 

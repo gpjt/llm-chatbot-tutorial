@@ -1,3 +1,12 @@
+---
+slug: ai-llm-bot-beginners-tutorial-00
+title: Building an AI chatbot for beginners: part 0
+date: 2023-03-19 20:45:00+00:00
+state: published
+categories: programming, python, ai
+format: md
+---
+
 Like a lot of people, I've been blown away by the capabilities of Large Language
 Model (LLM) based systems over the last few months.  I'm using ChatGPT regularly
 for all kinds of things, from generating basic code to debugging errors to writing
@@ -54,3 +63,4 @@ I'll be posting these as I write them.  Hopefully there are people out there
 who'll find them useful!
 
 * [Part 1: connecting to the OpenAI API and creating a bot that replies to messages](/2023/03/ai-llm-bot-beginners-tutorial-01)
+* [Part 2: keeping a history of the conversation](/2023/04/ai-llm-bot-beginners-tutorial-02)
