@@ -410,7 +410,7 @@ openai.error.InvalidRequestError: This model's maximum context length is 4097 to
 We'll come back to that later, however.  There's still more stuff to explore with this
 really simple model.
 
-For a start, it would be interesting to see how the older models, `ada`, `babbage`, and `curie` perform
+For a start, it would be interesting to see how the older models, `ada`, `babbage`, `curie` and `davinci` perform
 when given a context for the chat.  I recommend you try it out yourself, but here are some transcripts (without
 all of the logging, just the "finished" conversation).  Firstly, `ada`:
 
@@ -481,8 +481,30 @@ You said your favourite colour is green.
 That's not bad at all!  In fact, I find it a bit more engaging than the `text-davinci-003` model,
 perhaps because it approved of my choice of colour :-)
 
-However, I think I'll stick with `text-davinci-003` for the core chatbot for now.  We may wind up using older models
-for other things later.
+Let's check out `davinci`:
+
+```
+User:
+Hello
+
+Bot:
+Hello. I am Bot. How are you?
+
+User:
+My favourite colour is green, what's youres?
+
+Bot:
+My favorite color is red.
+
+User:
+What did I say my favourite colour was?
+
+Bot:
+You said your favorite color is green.
+```
+
+Edgy colour choice there, `davinci`.  Not a bad conversation, but I think I'll stick with `text-davinci-003`
+for the core chatbot for now.  We may wind up using older models for other things later.
 
 Let's move on to one glaring issue with this bot.  Firstly, let's show that it exists.  Here's a conversation
 (again, edited down to the transcript):
